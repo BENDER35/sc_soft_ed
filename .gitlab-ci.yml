@@ -1,0 +1,35 @@
+stages:
+  - mirror
+
+# GitLab -> GitHub. Se ejecuta en pushes a la rama por defecto.
+# La variable GH_TOKEN debe estar definida en Settings > CI/CD > Variables
+# (masked, protected, ámbito repo, con permiso repo/write).
+mirror-to-github:
+  stage: mirror
+  image: alpine:3.20
+  variables:
+    GIT_DEPTH: "0"
+    GIT_STRATEGY: fetch
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+  script:
+    - apk add --no-cache git
+    - |
+      set -euo pipefail
+      if [ -z "${GH_TOKEN:-}" ]; then
+        echo "Falta la variable CI GH_TOKEN"; exit 1
+      fi
+      case "${CI_COMMIT_MESSAGE}" in
+        *"[skip mirror]"*) echo "Commit marcado con [skip mirror]; se omite."; exit 0 ;;
+      esac
+      remote_url="https://x-access-token:${GH_TOKEN}@github.com/BENDER35/sc_soft_ed.git"
+      branch="${CI_DEFAULT_BRANCH:-main}"
+      local_head="$(git rev-parse HEAD)"
+      remote_head="$(git ls-remote "$remote_url" "refs/heads/${branch}" | awk '{print $1}')"
+      if [ "$local_head" = "$remote_head" ]; then
+        echo "GitHub ya contiene ${local_head}; no hay nada que replicar."
+        exit 0
+      fi
+      git push --force "$remote_url" "HEAD:refs/heads/${branch}"
+      echo "Espejo GitLab -> GitHub completado (${branch} @ ${local_head})."

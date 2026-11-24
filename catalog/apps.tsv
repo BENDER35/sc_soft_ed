@@ -1,0 +1,32 @@
+# key	name	area	tier
+gcompris	GCompris	Early years / logic	core
+tuxpaint	Tux Paint	Art / early literacy	core
+tuxmath	Tux Math	Mathematics / arithmetic	core
+tuxtyping	Tux Typing	Language / keyboarding	core
+libreoffice	LibreOffice	Productivity / writing	core
+anki	Anki	Spaced repetition / languages	core
+kiwix	Kiwix	Reference / offline Wikipedia	core
+geogebra	GeoGebra	Mathematics / geometry	core
+thonny	Thonny	Programming / Python	core
+kstars	KStars	Science / astronomy	core
+step	Step	Science / physics	core
+kalgebra	KAlgebra	Mathematics / functions	core
+kanagram	KAnagram	Language / vocabulary	core
+khangman	KHangMan	Language / spelling	core
+kwordquiz	KWordQuiz	Language / vocabulary	core
+ktouch	KTouch	Language / typing	core
+kgeography	KGeography	Geography / maps	core
+kig	Kig	Mathematics / geometry	core
+marble	Marble	Geography / globe	core
+gimp	GIMP	Art / image editing	core
+inkscape	Inkscape	Art / vector drawing	core
+krita	Krita	Art / painting	core
+audacity	Audacity	Music / audio	core
+musescore	MuseScore	Music / notation	core
+xournalpp	Xournal++	Note taking / PDF annotation	core
+freeplane	FreePlane	Mind maps / study planning	core
+scribus	Scribus	Publishing / layout	extra
+scratch	Scratch	Programming / block coding	extra
+childsplay	Childsplay	Early years / games	extra
+openboard	OpenBoard	Classroom / whiteboard	extra
+phet	PhET simulations	Science / interactive	extra
