@@ -14,32 +14,29 @@ jobs:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message || '', '[skip mirror]')"
     steps:
-      - name: Checkout (full history)
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Fetch all branches and tags
-        run: |
-          git fetch --prune --tags origin '+refs/heads/*:refs/heads/*'
-
-      - name: Push to GitLab if needed
+      - name: Mirror clone and push to GitLab
         env:
           GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
           GITLAB_REPO: https://gitlab.com/BENDER_5000/sc_soft_ed.git
+          BRANCH_NAME: ${{ github.ref_name }}
         run: |
           set -euo pipefail
           if [ -z "${GITLAB_TOKEN:-}" ]; then
             echo "::error::Falta el secreto GITLAB_TOKEN"; exit 1
           fi
+          # Clon espejo: contiene todas las ramas y etiquetas sin tocar un working tree.
+          git clone --quiet --mirror "https://github.com/${GITHUB_REPOSITORY}.git" mirror.git
+          cd mirror.git
+
           remote_url="https://oauth2:${GITLAB_TOKEN}@${GITLAB_REPO#https://}"
-          branch="${GITHUB_REF_NAME}"
-          local_head="$(git rev-parse HEAD)"
-          remote_head="$(git ls-remote "$remote_url" "refs/heads/${branch}" | awk '{print $1}')"
+          local_head="$(git rev-parse "refs/heads/${BRANCH_NAME}")"
+          remote_head="$(git ls-remote "$remote_url" "refs/heads/${BRANCH_NAME}" | awk '{print $1}')"
           if [ "$local_head" = "$remote_head" ]; then
             echo "GitLab ya contiene ${local_head}; no hay nada que replicar."
             exit 0
           fi
+
           git push --force "$remote_url" \
             '+refs/heads/*:refs/heads/*' '+refs/tags/*:refs/tags/*'
-          echo "Espejo GitHub -> GitLab completado (${branch} @ ${local_head})."
+          echo "Espejo GitHub -> GitLab completado (${BRANCH_NAME} @ ${local_head})."
