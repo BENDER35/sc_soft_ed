@@ -3,8 +3,8 @@
 | Fecha (UTC) | Dirección | Commit | Resultado |
 |---|---|---|---|
 | 2026-11-24 | Push inicial | `0192fc9` | GitHub y GitLab con el mismo SHA en `refs/heads/main` ✅ |
-| 2026-11-24 | GitHub → GitLab | pendiente | Se actualizará tras el push de corrección del workflow |
-| 2026-11-24 | GitLab → GitHub | pendiente | Se actualizará tras un push directo a GitLab |
+| 2026-11-24 | GitHub → GitLab | `f2c2f35` | GitHub Actions `success`; GitLab quedó con el mismo SHA ✅ |
+| 2026-11-24 | GitLab → GitHub | en curso | Push directo a GitLab; GitLab CI debe replicarlo en GitHub |
 
 El objetivo es que, tras cualquier push en un remoto, el otro remoto tenga el **mismo SHA** en `main`.
 
